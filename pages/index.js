@@ -87,5 +87,18 @@ export default function Home({ posts }) {
   );
 }
 
-//SSGを追加
+//SSG ビルド時に静的コンテンツを1回だけ生成する→アクセスするときに既に生成しているのでそれを引っ張るだけで良い！
+//ISRを追加
+export const getStaticProps = async () => {
+  const database = await getDatabase(databaseId);
+
+  return{
+    props: {
+      posts: database,
+    },
+    revalidate: 1,
+    //これをつけることでISRになる！　1sは古いキャッシュそのあとは1s毎に更新し続ける
+  };
+
+}
 
